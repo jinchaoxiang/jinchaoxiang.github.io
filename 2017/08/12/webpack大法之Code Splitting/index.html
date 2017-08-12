@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>webpack大法之Code Splitting | 金朝祥的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Code Splitting 是什么以及为什么在以前，为了减少 HTTP 请求，通常地，我们都会把所有的代码都打包成一个单独的 JS 文件。但是，如果这个 JS 文件体积很大的话，那就得不偿失了。 这时，我们不妨把所有代码分成一块一块，需要某块代码的时候再去加载它；还可以利用浏览器的缓存，下次用到它的话，直接从缓存中读取。很显然，这种做法可以加快我们网页的加载速度，美滋滋！ 所以说，Code Sp">
+<meta name="keywords" content="webpack">
+<meta property="og:type" content="article">
+<meta property="og:title" content="webpack大法之Code Splitting">
+<meta property="og:url" content="jinchaoxiang.top/2017/08/12/webpack大法之Code Splitting/index.html">
+<meta property="og:site_name" content="金朝祥的博客">
+<meta property="og:description" content="Code Splitting 是什么以及为什么在以前，为了减少 HTTP 请求，通常地，我们都会把所有的代码都打包成一个单独的 JS 文件。但是，如果这个 JS 文件体积很大的话，那就得不偿失了。 这时，我们不妨把所有代码分成一块一块，需要某块代码的时候再去加载它；还可以利用浏览器的缓存，下次用到它的话，直接从缓存中读取。很显然，这种做法可以加快我们网页的加载速度，美滋滋！ 所以说，Code Sp">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-08-12T13:09:14.167Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="webpack大法之Code Splitting">
+<meta name="twitter:description" content="Code Splitting 是什么以及为什么在以前，为了减少 HTTP 请求，通常地，我们都会把所有的代码都打包成一个单独的 JS 文件。但是，如果这个 JS 文件体积很大的话，那就得不偿失了。 这时，我们不妨把所有代码分成一块一块，需要某块代码的时候再去加载它；还可以利用浏览器的缓存，下次用到它的话，直接从缓存中读取。很显然，这种做法可以加快我们网页的加载速度，美滋滋！ 所以说，Code Sp">
+  
+    <link rel="alternate" href="/atom.xml" title="金朝祥的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="jinchaoxiang.top"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+          <a class="main-nav-link" href="/about">关于</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">金朝祥的博客</a>
+      </h1>
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-webpack大法之Code Splitting" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/08/12/webpack大法之Code Splitting/" class="article-date">
+  <time datetime="2017-08-12T07:11:09.000Z" itemprop="datePublished">2017-08-12</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/webpack/">webpack</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      webpack大法之Code Splitting
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h1 id="Code-Splitting-是什么以及为什么"><a href="#Code-Splitting-是什么以及为什么" class="headerlink" title="Code Splitting 是什么以及为什么"></a>Code Splitting 是什么以及为什么</h1><p>在以前，为了减少 HTTP 请求，通常地，我们都会把所有的代码都打包成一个单独的 JS 文件。但是，如果这个 JS 文件体积很大的话，那就得不偿失了。</p>
+<p>这时，我们不妨把所有代码分成一块一块，需要某块代码的时候再去加载它；还可以利用浏览器的缓存，下次用到它的话，直接从缓存中读取。很显然，这种做法可以加快我们网页的加载速度，美滋滋！</p>
+<p>所以说，Code Splitting 其实就是把代码分成很多很多块（ chunk ）咯。</p>
+<h1 id="Code-Splitting-怎么做"><a href="#Code-Splitting-怎么做" class="headerlink" title="Code Splitting 怎么做"></a>Code Splitting 怎么做</h1><p>主要有 2 种方式：</p>
+<ul>
+<li>分离业务代码和第三方库（ vendor ）</li>
+<li>按需加载（利用 import() 语法）</li>
+</ul>
+<p>之所以把业务代码和第三方库代码分离出来，是因为产品经理的需求是源源不断的，因此业务代码更新频率大，相反第三方库代码更新迭代相对较慢且可以锁版本，所以可以充分利用浏览器的缓存来加载这些第三方库。</p>
+<p>而按需加载的适用场景，比如说「访问某个路由的时候再去加载对应的组件」，用户不一定会访问所有的路由，所以没必要把所有路由对应的组件都先在开始的加载完；更典型的例子是「某些用户他们的权限只能访问某些页面」，所以没必要把他们没权限访问的页面的代码也加载。<br><a id="more"></a></p>
+<h1 id="开始工作"><a href="#开始工作" class="headerlink" title="开始工作"></a>开始工作</h1><h2 id="分离vendor"><a href="#分离vendor" class="headerlink" title="分离vendor"></a>分离vendor</h2><p>最简单的方法：加一个entry<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">// webpack.config.js</div><div class="line">module.exports = &#123;</div><div class="line">  entry: &#123;</div><div class="line">    app: <span class="string">'./src/main.js'</span>,</div><div class="line">    vendor: [</div><div class="line">      <span class="string">'vue'</span>,</div><div class="line">      <span class="string">'axio'</span>,</div><div class="line">      <span class="string">'vue-router'</span>,</div><div class="line">      <span class="string">'vuex'</span>,</div><div class="line">      <span class="string">'element-ui'</span>,</div><div class="line">      // 很长很长</div><div class="line">    ],</div><div class="line">  &#125;,</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>会发现app.js与vendor.js都包含了vue,为了提取<a href="https://webpack.js.org/plugins/commons-chunk-plugin/" target="_blank" rel="external">CommonsChunkPlugin</a></p>
+<h2 id="CommonsChunkPlugin"><a href="#CommonsChunkPlugin" class="headerlink" title="CommonsChunkPlugin"></a>CommonsChunkPlugin</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">new webpack.optimize.CommonsChunkPlugin(&#123;</div><div class="line">  name: <span class="string">'vendor'</span>,</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<blockquote>
+<p>Webpack 大佬，在所有的 chunk 中，帮我找到依赖2次及以上的模块，然后移到 vendor 这个 chunk 里面，感激不尽。</p>
+</blockquote>
+<ul>
+<li>所有的 chunk（ app.js 和 vendor.js ）中，app.js 和 vendor.js 都引用了 vue 和 axios</li>
+<li>加起来2次，那把他们都移动到 vendor.js 里面。</li>
+<li>最后，app.js 原本包含的 vue 和 axios 都移动到了 vendor.js 。</li>
+</ul>
+<p>但会发现一旦第三方架包躲起来，vendor数组length就会变得很长</p>
+<h2 id="自动化分离vendor"><a href="#自动化分离vendor" class="headerlink" title="自动化分离vendor"></a>自动化分离vendor</h2><p>所以我们就在想能不能自动化分离vendor<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">entry: &#123;</div><div class="line">  // vendor: [<span class="string">'vue'</span>, <span class="string">'axios'</span>] // 删掉!</div><div class="line">&#125;,</div><div class="line"></div><div class="line">new webpack.optimize.CommonsChunkPlugin(&#123;</div><div class="line">  name: <span class="string">'vendor'</span>,</div><div class="line">  minChunks: (&#123; resource &#125;) =&gt; (</div><div class="line">    resource &amp;&amp;</div><div class="line">    resource.indexOf(<span class="string">'node_modules'</span>) &gt;= 0 &amp;&amp;</div><div class="line">    resource.match(/\.js$/)</div><div class="line">  ),</div><div class="line">&#125;),</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>Webpack 大佬，如果你看见某些模块是来自 node_modules 目录的，并且名字是 .js 结尾的话，麻烦把他们都移到 vendor chunk 里去，如果 vendor chunk 不存在的话，就创建一个新的。</p>
+</blockquote>
+<ul>
+<li>找到了，vue 和 axios 都来自 node_modules 并且是 JS 文件</li>
+<li>vendor chunk 不存在，那我就创建一个</li>
+<li>把他们俩移动到 vendor chunk</li>
+</ul>
+<h2 id="Dynamic-import"><a href="#Dynamic-import" class="headerlink" title="Dynamic import"></a>Dynamic import</h2><p>vue按需加载组件<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">const Emoji = () =&gt; import(</div><div class="line">  /* webpackChunkName: <span class="string">"Emoji"</span> */</div><div class="line">  <span class="string">'./pages/Emoji.vue'</span>)</div><div class="line"></div><div class="line">const Photos = () =&gt; import(</div><div class="line">  /* webpackChunkName: <span class="string">"Photos"</span> */</div><div class="line">  <span class="string">'./pages/Photos.vue'</span>)</div></pre></td></tr></table></figure></p>
+<p>注意到，我们使用了 webpack v2.4  的新功能，可以设置 chunk 的名字；同时别忘了还要改 webpack 配置<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">output: &#123;</div><div class="line">  chunkFilename: <span class="string">'[name].chunk.js'</span>,</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>如果你用了 Babel ，就需要装上这个插件：<a href="https://www.npmjs.com/package/babel-plugin-syntax-dynamic-import" target="_blank" rel="external">babel plugin syntax dynamic import</a> 来解析 import() 语法。修改 .babelrc ：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="string">"plugins"</span>: [<span class="string">"syntax-dynamic-import"</span>]</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>会发现会多了异步组件chunk，但异步chunk里都包含了axios公共组件，因为页面初始化的时候chunk未加载进去</p>
+<h2 id="async-flag"><a href="#async-flag" class="headerlink" title="async flag"></a>async flag</h2><p>要解决上面的问题，我们需要用到 CommonsChunkPlugin 的 async 。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">// webpack.config.js</div><div class="line"></div><div class="line">new webpack.optimize.CommonsChunkPlugin(&#123;</div><div class="line">  async: <span class="string">'common-in-lazy'</span>,</div><div class="line">  minChunks: (&#123; resource &#125; = &#123;&#125;) =&gt; (</div><div class="line">    resource &amp;&amp;</div><div class="line">    resource.includes(<span class="string">'node_modules'</span>) &amp;&amp;</div><div class="line">    /axios/.<span class="built_in">test</span>(resource)</div><div class="line">  ),</div><div class="line">&#125;),</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>Webpack 大佬，帮我在所有的 async chunk 中，找到来自 node_modules ，并且名字带有 axios 的模块。</p>
+</blockquote>
+<ul>
+<li>所有的 async chunk ，就是 import() 产生的 chunk ，也就是 Emoji.chunk.js 和 Photos.chunk.js</li>
+<li>Emoji.chunk.js 和 Photos.chunk.js 都包含了 axios ，所以把他移动到名叫 common-in-lazy 的 chunk 中</li>
+<li>common-in-lazy chunk 并不存在，那就新建一个吧。</li>
+</ul>
+<p>但异步chunk里还会包含公共子组件，解决方法：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">new webpack.optimize.CommonsChunkPlugin(&#123;</div><div class="line">  async: <span class="string">'used-twice'</span>,</div><div class="line">  minChunks: (module, count) =&gt; (</div><div class="line">    count &gt;= 2</div><div class="line">  ),</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+<h2 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h2><p>你的 Code Splitting = <a href="https://www.npmjs.com/package/webpack-bundle-analyzer" target="_blank" rel="external">webpack bundle analyzer</a> + CommonsChunkPlugin + 你的分析</p>
+<p>##参考文献<br><a href="https://medium.com/@adamrackis/vendor-and-code-splitting-in-webpack-2-6376358f1923" target="_blank" rel="external">Vendor and code splitting in webpack 2</a><br><a href="https://zhuanlan.zhihu.com/p/26710831" target="_blank" rel="external">ly你个c大神</a><br><a href="https://webpack.js.org/guides/code-splitting/" target="_blank" rel="external">Webpack Code Splitting</a><br><a href="https://survivejs.com/webpack/building/bundle-splitting/" target="_blank" rel="external">Survivejs - Webpack/Bundle Splitting</a><br><a href="https://medium.com/webpack/webpack-bits-getting-the-most-out-of-the-commonschunkplugin-ab389e5f318" target="_blank" rel="external">Webpack Bits: Getting the most out of the CommonsChunkPlugin</a></p>
+<p>##相关api参数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">@module.context: The directory that stores the file. For example: &apos;/my_project/node_modules/example-dependency&apos;</div><div class="line">@module.resource: The name of the file being processed. For example: &apos;/my_project/node_modules/example-dependency/index.js&apos;</div><div class="line">@count: how many chunks the module is used in</div><div class="line">minChunks: function(module, count) &#123;</div><div class="line">    // If module has a path, and inside of the path exists the name &quot;somelib&quot;,</div><div class="line">    // and it is used in 3 separate chunks/entries, then break it out into</div><div class="line">    // a separate chunk with chunk keyname &quot;my-single-lib-chunk&quot;, and filename &quot;my-single-lib-chunk.js&quot;</div><div class="line">    return module.resource &amp;&amp; (/somelib/).test(module.resource) &amp;&amp; count === 3;</div><div class="line">  &#125;</div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="jinchaoxiang.top/2017/08/12/webpack大法之Code Splitting/" data-id="cj69cbmgc00048kcvmdvt4hl6" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/webpack/">webpack</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+ <script src="/jquery/jquery.min.js"></script>
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =4
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+    
+<nav id="article-nav">
+  
+    <a href="/2017/08/12/webpack大法之Long Team Cache/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          webpack大法之Long Team Cache
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/08/09/Hexo/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">Hexo + GitHub Page 搭建在线博客</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+ 
+     
+  <div class="comments" id="comments">
+    
+     
+       
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+       
+      
+      
+  </div>
+ 
+  
+
+</section>
+           
+    <aside id="sidebar">
+  
+    
+
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Code-Splitting-是什么以及为什么"><span class="toc-number">1.</span> <span class="toc-text">Code Splitting 是什么以及为什么</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Code-Splitting-怎么做"><span class="toc-number">2.</span> <span class="toc-text">Code Splitting 怎么做</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#开始工作"><span class="toc-number">3.</span> <span class="toc-text">开始工作</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#分离vendor"><span class="toc-number">3.1.</span> <span class="toc-text">分离vendor</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CommonsChunkPlugin"><span class="toc-number">3.2.</span> <span class="toc-text">CommonsChunkPlugin</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#自动化分离vendor"><span class="toc-number">3.3.</span> <span class="toc-text">自动化分离vendor</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Dynamic-import"><span class="toc-number">3.4.</span> <span class="toc-text">Dynamic import</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#async-flag"><span class="toc-number">3.5.</span> <span class="toc-text">async flag</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Summary"><span class="toc-number">3.6.</span> <span class="toc-text">Summary</span></a></li></ol></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+    
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2014 - 2017 jinchaoxiang&nbsp;|&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;702290433@qq.com
+    </div>
+  </div>
+</footer>
+ <script src="/jquery/jquery.min.js"></script>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+    <a href="/about" class="mobile-nav-link">关于</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "e2fb4051c49842688ce669e634bc983f",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+    
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      })
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      })
+    </script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+ <script src="/js/is.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/elevator.js"></script>
+  </div>
+  <a href="https://github.com/zhchnchn"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/82b228a3648bf44fc1163ef44c62fcc60081495e/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"></a>
+</body>
+</html>

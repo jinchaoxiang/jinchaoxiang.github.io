@@ -69,9 +69,165 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-分割代码" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-webpack大法之tree shaking" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2017/08/12/分割代码/" class="article-date">
+    <a href="/2017/08/12/webpack大法之tree shaking/" class="article-date">
+  <time datetime="2017-08-12T13:29:55.000Z" itemprop="datePublished">2017-08-12</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/webpack/">webpack</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/08/12/webpack大法之tree shaking/">webpack大法之tree shaking</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h1 id="tree-shaking"><a href="#tree-shaking" class="headerlink" title="tree shaking"></a>tree shaking</h1><blockquote>
+<p>消灭没有用的代码</p>
+</blockquote>
+<p>Tree Shaking这个词最早听说于rollup.js，这个功能能够通过基于ES6 modules的静态特性做检测来找出未使用的代码。然后配合uglifyjs把无用代码“筛选”掉。</p>
+<p>比如在如下场景下：<br>util.js<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">export const foo = function () &#123;</div><div class="line">    return 1</div><div class="line">&#125;</div><div class="line"></div><div class="line">export const bar = function () &#123;</div><div class="line">    return 2</div><div class="line">&#125;</div><div class="line"></div><div class="line">export const foobar = function () &#123;</div><div class="line">    return 3</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>bar.js<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">import &#123;bar&#125; from &apos;./util&apos;</div><div class="line">const a = bar();</div></pre></td></tr></table></figure></p>
+<p>我们使用foo.js作为入口文件，自然希望webpack编译后只把util.js里面的bar变量引入到最终生成的文件，而其他没有用掉的能够被“优化”掉。Tree Shaking就是为了解决上述问题。</p>
+<h1 id="配合Babel"><a href="#配合Babel" class="headerlink" title="配合Babel"></a>配合Babel</h1><blockquote>
+<p>移除CommonJS模块</p>
+</blockquote>
+<p>在实际生产环境当中我们通常使用babel来编译模块化代码，但是初次使用会发现当配合babel是会导致Tree Shaking失效，原因大多是因为<strong>使用了CommonJS</strong>编译模块导致webpack基于ES6 modules的静态分析失效。所以我们需要在babel配置中<strong>去掉CommonJS模块</strong></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="jinchaoxiang.top/2017/08/12/webpack大法之tree shaking/" data-id="cj69cbmgi00068kcvzum9qw73" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/webpack/">webpack</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
+    <article id="post-Vue之async-component" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/08/12/Vue之async-component/" class="article-date">
+  <time datetime="2017-08-12T09:17:43.000Z" itemprop="datePublished">2017-08-12</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Vue/">Vue</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/08/12/Vue之async-component/">Vue之async-component</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Vue异步组件三种模式"><a href="#Vue异步组件三种模式" class="headerlink" title="Vue异步组件三种模式"></a>Vue异步组件三种模式</h1><h2 id="Lazy-load-in-Vue-components"><a href="#Lazy-load-in-Vue-components" class="headerlink" title="Lazy load in Vue components"></a>Lazy load in Vue components</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">Vue.component(<span class="string">'AsyncCmp'</span>, () =&gt; import(<span class="string">'./AsyncCmp'</span>))</div><div class="line">new Vue(&#123;</div><div class="line">  // ...</div><div class="line">  components: &#123;</div><div class="line">    <span class="string">'AsyncCmp'</span>: () =&gt; import(<span class="string">'./AsyncCmp'</span>)</div><div class="line">  &#125;</div><div class="line">&#125;)</div><div class="line">components: &#123;</div><div class="line">  UiAlert: () =&gt; import(<span class="string">'keen-ui'</span>).<span class="keyword">then</span>((&#123; UiAlert &#125;) =&gt; UiAlert))</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+        
+          <p class="article-more-link">
+            <a href="/2017/08/12/Vue之async-component/#more">继续阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="jinchaoxiang.top/2017/08/12/Vue之async-component/" data-id="cj69cbmg500018kcvauufp5zr" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Vue/">Vue</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
+    <article id="post-webpack大法之Long Team Cache" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/08/12/webpack大法之Long Team Cache/" class="article-date">
+  <time datetime="2017-08-12T07:40:42.000Z" itemprop="datePublished">2017-08-12</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/webpack/">webpack</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/08/12/webpack大法之Long Team Cache/">webpack大法之Long Team Cache</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Webpack-amp-Caching"><a href="#Webpack-amp-Caching" class="headerlink" title="Webpack &amp; Caching"></a>Webpack &amp; Caching</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">// webpack.config.js</div><div class="line">module.exports = &#123;</div><div class="line">  output: &#123;</div><div class="line">    //...</div><div class="line">    filename: &apos;[name].[chunkhash:8].js&apos;,</div><div class="line">    chunkFilename: &apos;[name].[chunkhash:8].chunk.js&apos;,</div><div class="line">    //...</div><div class="line">  &#125;,</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>提取runtime代码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">new webpack.optimize.CommonsChunkPlugin(&#123;</div><div class="line">  name: [&apos;manifast&apos;]</div><div class="line">&#125;),</div></pre></td></tr></table></figure></p>
+        
+          <p class="article-more-link">
+            <a href="/2017/08/12/webpack大法之Long Team Cache/#more">继续阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="jinchaoxiang.top/2017/08/12/webpack大法之Long Team Cache/" data-id="cj69cbmge00058kcvzlm40epd" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/webpack/">webpack</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
+    <article id="post-webpack大法之Code Splitting" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/08/12/webpack大法之Code Splitting/" class="article-date">
   <time datetime="2017-08-12T07:11:09.000Z" itemprop="datePublished">2017-08-12</time>
 </a>
     
@@ -87,7 +243,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/08/12/分割代码/">webpack大法之分割代码</a>
+      <a class="article-title" href="/2017/08/12/webpack大法之Code Splitting/">webpack大法之Code Splitting</a>
     </h1>
   
 
@@ -95,17 +251,25 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <!-- Table of Contents -->
+        <h1 id="Code-Splitting-是什么以及为什么"><a href="#Code-Splitting-是什么以及为什么" class="headerlink" title="Code Splitting 是什么以及为什么"></a>Code Splitting 是什么以及为什么</h1><p>在以前，为了减少 HTTP 请求，通常地，我们都会把所有的代码都打包成一个单独的 JS 文件。但是，如果这个 JS 文件体积很大的话，那就得不偿失了。</p>
+<p>这时，我们不妨把所有代码分成一块一块，需要某块代码的时候再去加载它；还可以利用浏览器的缓存，下次用到它的话，直接从缓存中读取。很显然，这种做法可以加快我们网页的加载速度，美滋滋！</p>
+<p>所以说，Code Splitting 其实就是把代码分成很多很多块（ chunk ）咯。</p>
+<h1 id="Code-Splitting-怎么做"><a href="#Code-Splitting-怎么做" class="headerlink" title="Code Splitting 怎么做"></a>Code Splitting 怎么做</h1><p>主要有 2 种方式：</p>
+<ul>
+<li>分离业务代码和第三方库（ vendor ）</li>
+<li>按需加载（利用 import() 语法）</li>
+</ul>
+<p>之所以把业务代码和第三方库代码分离出来，是因为产品经理的需求是源源不断的，因此业务代码更新频率大，相反第三方库代码更新迭代相对较慢且可以锁版本，所以可以充分利用浏览器的缓存来加载这些第三方库。</p>
+<p>而按需加载的适用场景，比如说「访问某个路由的时候再去加载对应的组件」，用户不一定会访问所有的路由，所以没必要把所有路由对应的组件都先在开始的加载完；更典型的例子是「某些用户他们的权限只能访问某些页面」，所以没必要把他们没权限访问的页面的代码也加载。<br>
         
-        <p>#webpack</p>
-<blockquote>
-<p>应用</p>
-</blockquote>
-
+          <p class="article-more-link">
+            <a href="/2017/08/12/webpack大法之Code Splitting/#more">继续阅读全文 »</a>
+          </p>
+        
       
     </div>
     <footer class="article-footer">
-      <a data-url="jinchaoxiang.top/2017/08/12/分割代码/" data-id="cj68yqdqw000178cvl1nhh6u7" class="article-share-link">分享</a>
+      <a data-url="jinchaoxiang.top/2017/08/12/webpack大法之Code Splitting/" data-id="cj69cbmgc00048kcvmdvt4hl6" class="article-share-link">分享</a>
       
       
       
@@ -158,7 +322,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="jinchaoxiang.top/2017/08/09/Hexo/" data-id="cj68yqwf0000778cvpr5aa2td" class="article-share-link">分享</a>
+      <a data-url="jinchaoxiang.top/2017/08/09/Hexo/" data-id="cj69cbmfz00008kcvjo4jlaus" class="article-share-link">分享</a>
       
       
       
@@ -206,7 +370,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title categories">分类</h3>
     <div class="widget" id="categories">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Hexo/">Hexo</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/webpack/">webpack</a><span class="category-list-count">1</span></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Hexo/">Hexo</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Vue/">Vue</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/webpack/">webpack</a><span class="category-list-count">3</span></li></ul>
     </div>
   </div>
 
@@ -216,7 +380,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title tagcloud">标签云</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Hexo/" style="font-size: 14px; color: #00f">Hexo</a> <a href="/tags/webpack/" style="font-size: 14px; color: #00f">webpack</a>
+      <a href="/tags/Hexo/" style="font-size: 14px; color: #00f">Hexo</a> <a href="/tags/Vue/" style="font-size: 14px; color: #00f">Vue</a> <a href="/tags/webpack/" style="font-size: 25px; color: #ee82ee">webpack</a>
     </div>
   </div>
 
@@ -228,7 +392,19 @@
       <ul>
         
           <li>
-            <a href="/2017/08/12/分割代码/">webpack大法之分割代码</a>
+            <a href="/2017/08/12/webpack大法之tree shaking/">webpack大法之tree shaking</a>
+          </li>
+        
+          <li>
+            <a href="/2017/08/12/Vue之async-component/">Vue之async-component</a>
+          </li>
+        
+          <li>
+            <a href="/2017/08/12/webpack大法之Long Team Cache/">webpack大法之Long Team Cache</a>
+          </li>
+        
+          <li>
+            <a href="/2017/08/12/webpack大法之Code Splitting/">webpack大法之Code Splitting</a>
           </li>
         
           <li>
@@ -244,7 +420,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title archive">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a><span class="archive-list-count">2</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a><span class="archive-list-count">5</span></li></ul>
     </div>
   </div>
 
@@ -267,7 +443,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title tags">标签</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/">Hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/webpack/">webpack</a><span class="tag-list-count">1</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/">Hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue/">Vue</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/webpack/">webpack</a><span class="tag-list-count">3</span></li></ul>
     </div>
   </div>
 

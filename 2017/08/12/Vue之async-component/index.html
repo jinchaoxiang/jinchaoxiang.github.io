@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Vue之async-component | 金朝祥的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Vue异步组件三种模式Lazy load in Vue components12345678910Vue.component(&apos;AsyncCmp&apos;, () =&amp;gt; import(&apos;./AsyncCmp&apos;))new Vue(&amp;#123;  // ...  components: &amp;#123;    &apos;AsyncCmp&apos;: () =&amp;gt; import(&apos;./AsyncCmp&apos;)  &amp;#125;">
+<meta name="keywords" content="Vue">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vue之async-component">
+<meta property="og:url" content="jinchaoxiang.top/2017/08/12/Vue之async-component/index.html">
+<meta property="og:site_name" content="金朝祥的博客">
+<meta property="og:description" content="Vue异步组件三种模式Lazy load in Vue components12345678910Vue.component(&apos;AsyncCmp&apos;, () =&amp;gt; import(&apos;./AsyncCmp&apos;))new Vue(&amp;#123;  // ...  components: &amp;#123;    &apos;AsyncCmp&apos;: () =&amp;gt; import(&apos;./AsyncCmp&apos;)  &amp;#125;">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-08-12T09:29:31.575Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Vue之async-component">
+<meta name="twitter:description" content="Vue异步组件三种模式Lazy load in Vue components12345678910Vue.component(&apos;AsyncCmp&apos;, () =&amp;gt; import(&apos;./AsyncCmp&apos;))new Vue(&amp;#123;  // ...  components: &amp;#123;    &apos;AsyncCmp&apos;: () =&amp;gt; import(&apos;./AsyncCmp&apos;)  &amp;#125;">
+  
+    <link rel="alternate" href="/atom.xml" title="金朝祥的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="jinchaoxiang.top"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+          <a class="main-nav-link" href="/about">关于</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">金朝祥的博客</a>
+      </h1>
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Vue之async-component" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/08/12/Vue之async-component/" class="article-date">
+  <time datetime="2017-08-12T09:17:43.000Z" itemprop="datePublished">2017-08-12</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Vue/">Vue</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Vue之async-component
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h1 id="Vue异步组件三种模式"><a href="#Vue异步组件三种模式" class="headerlink" title="Vue异步组件三种模式"></a>Vue异步组件三种模式</h1><h2 id="Lazy-load-in-Vue-components"><a href="#Lazy-load-in-Vue-components" class="headerlink" title="Lazy load in Vue components"></a>Lazy load in Vue components</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">Vue.component(<span class="string">'AsyncCmp'</span>, () =&gt; import(<span class="string">'./AsyncCmp'</span>))</div><div class="line">new Vue(&#123;</div><div class="line">  // ...</div><div class="line">  components: &#123;</div><div class="line">    <span class="string">'AsyncCmp'</span>: () =&gt; import(<span class="string">'./AsyncCmp'</span>)</div><div class="line">  &#125;</div><div class="line">&#125;)</div><div class="line">components: &#123;</div><div class="line">  UiAlert: () =&gt; import(<span class="string">'keen-ui'</span>).<span class="keyword">then</span>((&#123; UiAlert &#125;) =&gt; UiAlert))</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<a id="more"></a>
+<h2 id="Lazy-load-in-Vue-router"><a href="#Lazy-load-in-Vue-router" class="headerlink" title="Lazy load in Vue router"></a>Lazy load in Vue router</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">// Instead of: import Login from &apos;./login&apos;</div><div class="line">const Login = () =&gt; import(&apos;./login&apos;)</div><div class="line"></div><div class="line">new VueRouter(&#123;</div><div class="line">  routes: [</div><div class="line">    &#123; path: &apos;/login&apos;, component: Login &#125;</div><div class="line">  ]</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<h2 id="Lazy-load-a-Vuex-module"><a href="#Lazy-load-a-Vuex-module" class="headerlink" title="Lazy load a Vuex module"></a>Lazy load a Vuex module</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">const store = new Vuex.Store()</div><div class="line"></div><div class="line">...</div><div class="line"></div><div class="line">// Assume there is a &quot;login&quot; module we wanna load</div><div class="line">import(&apos;./store/login&apos;).then(loginModule =&gt; &#123;</div><div class="line">  store.registerModule(&apos;login&apos;, loginModule)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="jinchaoxiang.top/2017/08/12/Vue之async-component/" data-id="cj69cbmg500018kcvauufp5zr" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Vue/">Vue</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+ <script src="/jquery/jquery.min.js"></script>
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =4
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+    
+<nav id="article-nav">
+  
+    <a href="/2017/08/12/webpack大法之tree shaking/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          webpack大法之tree shaking
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/08/12/webpack大法之Long Team Cache/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">webpack大法之Long Team Cache</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+ 
+     
+  <div class="comments" id="comments">
+    
+     
+       
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+       
+      
+      
+  </div>
+ 
+  
+
+</section>
+           
+    <aside id="sidebar">
+  
+    
+
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Vue异步组件三种模式"><span class="toc-number">1.</span> <span class="toc-text">Vue异步组件三种模式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Lazy-load-in-Vue-components"><span class="toc-number">1.1.</span> <span class="toc-text">Lazy load in Vue components</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Lazy-load-in-Vue-router"><span class="toc-number">1.2.</span> <span class="toc-text">Lazy load in Vue router</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Lazy-load-a-Vuex-module"><span class="toc-number">1.3.</span> <span class="toc-text">Lazy load a Vuex module</span></a></li></ol></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+    
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2014 - 2017 jinchaoxiang&nbsp;|&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;702290433@qq.com
+    </div>
+  </div>
+</footer>
+ <script src="/jquery/jquery.min.js"></script>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+    <a href="/about" class="mobile-nav-link">关于</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "e2fb4051c49842688ce669e634bc983f",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+    
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      })
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      })
+    </script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+ <script src="/js/is.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/elevator.js"></script>
+  </div>
+  <a href="https://github.com/zhchnchn"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/82b228a3648bf44fc1163ef44c62fcc60081495e/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"></a>
+</body>
+</html>
