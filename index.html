@@ -69,6 +69,58 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-docker之安装nginx" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/08/14/docker之安装nginx/" class="article-date">
+  <time datetime="2017-08-14T01:58:01.000Z" itemprop="datePublished">2017-08-14</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/docker/">docker</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/08/14/docker之安装nginx/">docker之安装nginx</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h1 id="Help命令"><a href="#Help命令" class="headerlink" title="Help命令"></a>Help命令</h1><p>Docker学习里面最重要的是什么？同其他程序一样，最重要的就是Help命令。<br>在命令行中敲入：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">docker help</div><div class="line">docker help run</div></pre></td></tr></table></figure></p>
+<h1 id="拉取nginx镜像文件"><a href="#拉取nginx镜像文件" class="headerlink" title="拉取nginx镜像文件"></a>拉取nginx镜像文件</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">docker pull nginx</div><div class="line">docker images</div></pre></td></tr></table></figure>
+<h1 id="创建一台nginx服务器"><a href="#创建一台nginx服务器" class="headerlink" title="创建一台nginx服务器"></a>创建一台nginx服务器</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker run -it -d --rm --name webserver -p 80:80 nginx</div></pre></td></tr></table></figure>
+<h1 id="查看服务进程"><a href="#查看服务进程" class="headerlink" title="查看服务进程"></a>查看服务进程</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker ps -a</div></pre></td></tr></table></figure>
+<h1 id="访问nginx服务器"><a href="#访问nginx服务器" class="headerlink" title="访问nginx服务器"></a>访问nginx服务器</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">docker run --interactive --tty --link web:web --name my_tty busybox /bin/sh</div><div class="line">//网页打开虚拟机ip地址</div></pre></td></tr></table></figure>
+<h1 id="其他一些有用的命令"><a href="#其他一些有用的命令" class="headerlink" title="其他一些有用的命令"></a>其他一些有用的命令</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">docker restart web</div><div class="line">docker logs web</div><div class="line">docker stop web</div></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="jinchaoxiang.top/2017/08/14/docker之安装nginx/" data-id="cj6m59sjo0001yocvskfu6bgp" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/docker/">docker</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
     <article id="post-webpack大法之tree shaking" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2017/08/12/webpack大法之tree shaking/" class="article-date">
@@ -112,7 +164,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="jinchaoxiang.top/2017/08/12/webpack大法之tree shaking/" data-id="cj69cbmgi00068kcvzum9qw73" class="article-share-link">分享</a>
+      <a data-url="jinchaoxiang.top/2017/08/12/webpack大法之tree shaking/" data-id="cj6m59sjy0006yocv979ec26p" class="article-share-link">分享</a>
       
       
       
@@ -161,7 +213,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="jinchaoxiang.top/2017/08/12/Vue之async-component/" data-id="cj69cbmg500018kcvauufp5zr" class="article-share-link">分享</a>
+      <a data-url="jinchaoxiang.top/2017/08/12/Vue之async-component/" data-id="cj6m59sk1000ayocv73k7qyg6" class="article-share-link">分享</a>
       
       
       
@@ -211,7 +263,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="jinchaoxiang.top/2017/08/12/webpack大法之Long Team Cache/" data-id="cj69cbmge00058kcvzlm40epd" class="article-share-link">分享</a>
+      <a data-url="jinchaoxiang.top/2017/08/12/webpack大法之Long Team Cache/" data-id="cj6m59sju0004yocvs3bpotrt" class="article-share-link">分享</a>
       
       
       
@@ -269,7 +321,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="jinchaoxiang.top/2017/08/12/webpack大法之Code Splitting/" data-id="cj69cbmgc00048kcvmdvt4hl6" class="article-share-link">分享</a>
+      <a data-url="jinchaoxiang.top/2017/08/12/webpack大法之Code Splitting/" data-id="cj6m59sjv0005yocvj4nhnsej" class="article-share-link">分享</a>
       
       
       
@@ -283,60 +335,11 @@
 
 
   
-    <article id="post-Hexo" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/08/09/Hexo/" class="article-date">
-  <time datetime="2017-08-09T13:00:00.000Z" itemprop="datePublished">2017-08-09</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Hexo/">Hexo</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/08/09/Hexo/">Hexo + GitHub Page 搭建在线博客</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="系统环境配置"><a href="#系统环境配置" class="headerlink" title="系统环境配置"></a>系统环境配置</h1><p>要使用Hexo，需要在你的系统中支持Nodejs以及Git，如果还没有，那就开始安装吧！</p>
-<h2 id="安装Node-js"><a href="#安装Node-js" class="headerlink" title="安装Node.js"></a>安装Node.js</h2><p><a href="http://nodejs.cn/download/" target="_blank" rel="external">下载Node.js</a><br><a href="http://nodejs.cn/api/" target="_blank" rel="external">Nodejs在线文档</a><br><a href="http://cnodejs.org/" target="_blank" rel="external">CNode社区</a></p>
-<h2 id="安装git"><a href="#安装git" class="headerlink" title="安装git"></a>安装git</h2><p><a href="https://git-scm.com/" target="_blank" rel="external">下载git</a></p>
-<h2 id="安装Hexo-搭建博客"><a href="#安装Hexo-搭建博客" class="headerlink" title="安装Hexo 搭建博客"></a>安装Hexo 搭建博客</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">npm install hexo-cli -g</div><div class="line">hexo init jcxblog</div><div class="line"><span class="built_in">cd</span> jcxblog</div><div class="line">npm install</div></pre></td></tr></table></figure>
-<p>至此Hexo所需要的环境都已经安装完成<br>
-        
-          <p class="article-more-link">
-            <a href="/2017/08/09/Hexo/#more">继续阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="jinchaoxiang.top/2017/08/09/Hexo/" data-id="cj69cbmfz00008kcvjo4jlaus" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hexo/">Hexo</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
- 
 
 
-  
-
+  <nav id="page-nav">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">下一页&raquo;</a>
+  </nav>
 </section>
            
     <aside id="sidebar">
@@ -370,7 +373,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title categories">分类</h3>
     <div class="widget" id="categories">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Hexo/">Hexo</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Vue/">Vue</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/webpack/">webpack</a><span class="category-list-count">3</span></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Hexo/">Hexo</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Vue/">Vue</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/docker/">docker</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/webpack/">webpack</a><span class="category-list-count">3</span></li></ul>
     </div>
   </div>
 
@@ -380,7 +383,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title tagcloud">标签云</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Hexo/" style="font-size: 14px; color: #00f">Hexo</a> <a href="/tags/Vue/" style="font-size: 14px; color: #00f">Vue</a> <a href="/tags/webpack/" style="font-size: 25px; color: #ee82ee">webpack</a>
+      <a href="/tags/Hexo/" style="font-size: 14px; color: #00f">Hexo</a> <a href="/tags/Vue/" style="font-size: 14px; color: #00f">Vue</a> <a href="/tags/docker/" style="font-size: 14px; color: #00f">docker</a> <a href="/tags/webpack/" style="font-size: 25px; color: #ee82ee">webpack</a>
     </div>
   </div>
 
@@ -390,6 +393,10 @@
     <h3 class="widget-title recent-posts">最新文章</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2017/08/14/docker之安装nginx/">docker之安装nginx</a>
+          </li>
         
           <li>
             <a href="/2017/08/12/webpack大法之tree shaking/">webpack大法之tree shaking</a>
@@ -407,10 +414,6 @@
             <a href="/2017/08/12/webpack大法之Code Splitting/">webpack大法之Code Splitting</a>
           </li>
         
-          <li>
-            <a href="/2017/08/09/Hexo/">Hexo + GitHub Page 搭建在线博客</a>
-          </li>
-        
       </ul>
     </div>
   </div>
@@ -420,7 +423,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title archive">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a><span class="archive-list-count">5</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a><span class="archive-list-count">6</span></li></ul>
     </div>
   </div>
 
@@ -443,7 +446,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title tags">标签</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/">Hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue/">Vue</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/webpack/">webpack</a><span class="tag-list-count">3</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/">Hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue/">Vue</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/">docker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/webpack/">webpack</a><span class="tag-list-count">3</span></li></ul>
     </div>
   </div>
 

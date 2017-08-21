@@ -3,20 +3,20 @@
 <head>
   <meta charset="utf-8">
   
-  <title>webpack大法之tree shaking | 金朝祥的博客</title>
+  <title>docker之安装nginx | 金朝祥的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="tree shaking 消灭没有用的代码  Tree Shaking这个词最早听说于rollup.js，这个功能能够通过基于ES6 modules的静态特性做检测来找出未使用的代码。然后配合uglifyjs把无用代码“筛选”掉。 比如在如下场景下：util.js1234567891011export const foo = function () &amp;#123;    return 1&amp;#125;">
-<meta name="keywords" content="webpack">
+  <meta name="description" content="Help命令Docker学习里面最重要的是什么？同其他程序一样，最重要的就是Help命令。在命令行中敲入：12docker helpdocker help run 拉取nginx镜像文件12docker pull nginxdocker images 创建一台nginx服务器1docker run -it -d --rm --name webserver -p 80:80 nginx 查看服务进程">
+<meta name="keywords" content="docker">
 <meta property="og:type" content="article">
-<meta property="og:title" content="webpack大法之tree shaking">
-<meta property="og:url" content="jinchaoxiang.top/2017/08/12/webpack大法之tree shaking/index.html">
+<meta property="og:title" content="docker之安装nginx">
+<meta property="og:url" content="jinchaoxiang.top/2017/08/14/docker之安装nginx/index.html">
 <meta property="og:site_name" content="金朝祥的博客">
-<meta property="og:description" content="tree shaking 消灭没有用的代码  Tree Shaking这个词最早听说于rollup.js，这个功能能够通过基于ES6 modules的静态特性做检测来找出未使用的代码。然后配合uglifyjs把无用代码“筛选”掉。 比如在如下场景下：util.js1234567891011export const foo = function () &amp;#123;    return 1&amp;#125;">
+<meta property="og:description" content="Help命令Docker学习里面最重要的是什么？同其他程序一样，最重要的就是Help命令。在命令行中敲入：12docker helpdocker help run 拉取nginx镜像文件12docker pull nginxdocker images 创建一台nginx服务器1docker run -it -d --rm --name webserver -p 80:80 nginx 查看服务进程">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-08-12T13:36:17.278Z">
+<meta property="og:updated_time" content="2017-08-14T02:37:53.873Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="webpack大法之tree shaking">
-<meta name="twitter:description" content="tree shaking 消灭没有用的代码  Tree Shaking这个词最早听说于rollup.js，这个功能能够通过基于ES6 modules的静态特性做检测来找出未使用的代码。然后配合uglifyjs把无用代码“筛选”掉。 比如在如下场景下：util.js1234567891011export const foo = function () &amp;#123;    return 1&amp;#125;">
+<meta name="twitter:title" content="docker之安装nginx">
+<meta name="twitter:description" content="Help命令Docker学习里面最重要的是什么？同其他程序一样，最重要的就是Help命令。在命令行中敲入：12docker helpdocker help run 拉取nginx镜像文件12docker pull nginxdocker images 创建一台nginx服务器1docker run -it -d --rm --name webserver -p 80:80 nginx 查看服务进程">
   
     <link rel="alternate" href="/atom.xml" title="金朝祥的博客" type="application/atom+xml">
   
@@ -69,14 +69,14 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-webpack大法之tree shaking" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-docker之安装nginx" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2017/08/12/webpack大法之tree shaking/" class="article-date">
-  <time datetime="2017-08-12T13:29:55.000Z" itemprop="datePublished">2017-08-12</time>
+    <a href="/2017/08/14/docker之安装nginx/" class="article-date">
+  <time datetime="2017-08-14T01:58:01.000Z" itemprop="datePublished">2017-08-14</time>
 </a>
     
   <div class="article-category">
-    <a class="article-category-link" href="/categories/webpack/">webpack</a>
+    <a class="article-category-link" href="/categories/docker/">docker</a>
   </div>
 
   </div>
@@ -87,7 +87,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      webpack大法之tree shaking
+      docker之安装nginx
     </h1>
   
 
@@ -97,26 +97,21 @@
       
         <!-- Table of Contents -->
         
-        <h1 id="tree-shaking"><a href="#tree-shaking" class="headerlink" title="tree shaking"></a>tree shaking</h1><blockquote>
-<p>消灭没有用的代码</p>
-</blockquote>
-<p>Tree Shaking这个词最早听说于rollup.js，这个功能能够通过基于ES6 modules的静态特性做检测来找出未使用的代码。然后配合uglifyjs把无用代码“筛选”掉。</p>
-<p>比如在如下场景下：<br>util.js<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">export const foo = function () &#123;</div><div class="line">    return 1</div><div class="line">&#125;</div><div class="line"></div><div class="line">export const bar = function () &#123;</div><div class="line">    return 2</div><div class="line">&#125;</div><div class="line"></div><div class="line">export const foobar = function () &#123;</div><div class="line">    return 3</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>bar.js<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">import &#123;bar&#125; from &apos;./util&apos;</div><div class="line">const a = bar();</div></pre></td></tr></table></figure></p>
-<p>我们使用foo.js作为入口文件，自然希望webpack编译后只把util.js里面的bar变量引入到最终生成的文件，而其他没有用掉的能够被“优化”掉。Tree Shaking就是为了解决上述问题。</p>
-<h1 id="配合Babel"><a href="#配合Babel" class="headerlink" title="配合Babel"></a>配合Babel</h1><blockquote>
-<p>移除CommonJS模块</p>
-</blockquote>
-<p>在实际生产环境当中我们通常使用babel来编译模块化代码，但是初次使用会发现当配合babel是会导致Tree Shaking失效，原因大多是因为<strong>使用了CommonJS</strong>编译模块导致webpack基于ES6 modules的静态分析失效。所以我们需要在babel配置中<strong>去掉CommonJS模块</strong></p>
+        <h1 id="Help命令"><a href="#Help命令" class="headerlink" title="Help命令"></a>Help命令</h1><p>Docker学习里面最重要的是什么？同其他程序一样，最重要的就是Help命令。<br>在命令行中敲入：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">docker help</div><div class="line">docker help run</div></pre></td></tr></table></figure></p>
+<h1 id="拉取nginx镜像文件"><a href="#拉取nginx镜像文件" class="headerlink" title="拉取nginx镜像文件"></a>拉取nginx镜像文件</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">docker pull nginx</div><div class="line">docker images</div></pre></td></tr></table></figure>
+<h1 id="创建一台nginx服务器"><a href="#创建一台nginx服务器" class="headerlink" title="创建一台nginx服务器"></a>创建一台nginx服务器</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker run -it -d --rm --name webserver -p 80:80 nginx</div></pre></td></tr></table></figure>
+<h1 id="查看服务进程"><a href="#查看服务进程" class="headerlink" title="查看服务进程"></a>查看服务进程</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker ps -a</div></pre></td></tr></table></figure>
+<h1 id="访问nginx服务器"><a href="#访问nginx服务器" class="headerlink" title="访问nginx服务器"></a>访问nginx服务器</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">docker run --interactive --tty --link web:web --name my_tty busybox /bin/sh</div><div class="line">//网页打开虚拟机ip地址</div></pre></td></tr></table></figure>
+<h1 id="其他一些有用的命令"><a href="#其他一些有用的命令" class="headerlink" title="其他一些有用的命令"></a>其他一些有用的命令</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">docker restart web</div><div class="line">docker logs web</div><div class="line">docker stop web</div></pre></td></tr></table></figure>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="jinchaoxiang.top/2017/08/12/webpack大法之tree shaking/" data-id="cj6m59sjy0006yocv979ec26p" class="article-share-link">分享</a>
+      <a data-url="jinchaoxiang.top/2017/08/14/docker之安装nginx/" data-id="cj6m59sjo0001yocvskfu6bgp" class="article-share-link">分享</a>
       
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/webpack/">webpack</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/docker/">docker</a></li></ul>
 
     </footer>
   </div>
@@ -166,19 +161,10 @@
     
 <nav id="article-nav">
   
-    <a href="/2017/08/14/docker之安装nginx/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">上一篇</strong>
-      <div class="article-nav-title">
-        
-          docker之安装nginx
-        
-      </div>
-    </a>
   
-  
-    <a href="/2017/08/12/Vue之async-component/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2017/08/12/webpack大法之tree shaking/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">下一篇</strong>
-      <div class="article-nav-title">Vue之async-component</div>
+      <div class="article-nav-title">webpack大法之tree shaking</div>
     </a>
   
 </nav>
@@ -214,7 +200,7 @@
       
         <strong class="toc-title">文章目录</strong>
         <div class="toc-widget-list">
-              <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#tree-shaking"><span class="toc-number">1.</span> <span class="toc-text">tree shaking</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#配合Babel"><span class="toc-number">2.</span> <span class="toc-text">配合Babel</span></a></li></ol>
+              <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Help命令"><span class="toc-number">1.</span> <span class="toc-text">Help命令</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#拉取nginx镜像文件"><span class="toc-number">2.</span> <span class="toc-text">拉取nginx镜像文件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#创建一台nginx服务器"><span class="toc-number">3.</span> <span class="toc-text">创建一台nginx服务器</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#查看服务进程"><span class="toc-number">4.</span> <span class="toc-text">查看服务进程</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#访问nginx服务器"><span class="toc-number">5.</span> <span class="toc-text">访问nginx服务器</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#其他一些有用的命令"><span class="toc-number">6.</span> <span class="toc-text">其他一些有用的命令</span></a></li></ol>
           </div>
       </div>
     </div>
