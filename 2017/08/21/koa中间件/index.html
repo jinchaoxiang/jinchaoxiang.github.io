@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>&#39;koa中间件原理剖析&#39; | 金朝祥的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="洋葱模型接下来我们来看一下koa的源码，了解中间件的实现方式。 首先我们找到了koa的仓库Koa,好吧,我知道你们都会这一步。 在package.json中找到模块的入口文件application.js,稍微浏览一下(不得不说，tj大神的代码写的真的漂亮)就可以找到Koa处理请求的代码12345678910111213141516171819app.callback = function()&amp;#1">
+<meta name="keywords" content="koa">
+<meta property="og:type" content="article">
+<meta property="og:title" content="&#39;koa中间件原理剖析&#39;">
+<meta property="og:url" content="jinchaoxiang.top/2017/08/21/koa中间件/index.html">
+<meta property="og:site_name" content="金朝祥的博客">
+<meta property="og:description" content="洋葱模型接下来我们来看一下koa的源码，了解中间件的实现方式。 首先我们找到了koa的仓库Koa,好吧,我知道你们都会这一步。 在package.json中找到模块的入口文件application.js,稍微浏览一下(不得不说，tj大神的代码写的真的漂亮)就可以找到Koa处理请求的代码12345678910111213141516171819app.callback = function()&amp;#1">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-08-21T13:11:15.959Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="&#39;koa中间件原理剖析&#39;">
+<meta name="twitter:description" content="洋葱模型接下来我们来看一下koa的源码，了解中间件的实现方式。 首先我们找到了koa的仓库Koa,好吧,我知道你们都会这一步。 在package.json中找到模块的入口文件application.js,稍微浏览一下(不得不说，tj大神的代码写的真的漂亮)就可以找到Koa处理请求的代码12345678910111213141516171819app.callback = function()&amp;#1">
+  
+    <link rel="alternate" href="/atom.xml" title="金朝祥的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="jinchaoxiang.top"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+          <a class="main-nav-link" href="/about">关于</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">金朝祥的博客</a>
+      </h1>
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-koa中间件" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/08/21/koa中间件/" class="article-date">
+  <time datetime="2017-08-21T12:46:38.000Z" itemprop="datePublished">2017-08-21</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/koa/">koa</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      &#39;koa中间件原理剖析&#39;
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h1 id="洋葱模型"><a href="#洋葱模型" class="headerlink" title="洋葱模型"></a>洋葱模型</h1><p>接下来我们来看一下koa的源码，了解中间件的实现方式。</p>
+<p>首先我们找到了koa的仓库Koa,好吧,我知道你们都会这一步。</p>
+<p>在package.json中找到模块的入口文件application.js,稍微浏览一下(不得不说，tj大神的代码写的真的漂亮)就可以找到Koa处理请求的代码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">app.callback = function()&#123;</div><div class="line">  if (this.experimental) &#123;</div><div class="line">    console.error(&apos;Experimental ES7 Async Function support is deprecated. Please look into Koa v2 as the middleware signature has changed.&apos;)</div><div class="line">  &#125;</div><div class="line">  var fn = this.experimental</div><div class="line">    ? compose_es7(this.middleware)</div><div class="line">    : co.wrap(compose(this.middleware));</div><div class="line">  var self = this;</div><div class="line">  if (!this.listeners(&apos;error&apos;).length) this.on(&apos;error&apos;, this.onerror);</div><div class="line"></div><div class="line">  return function handleRequest(req, res)&#123;</div><div class="line">    res.statusCode = 404;</div><div class="line">    var ctx = self.createContext(req, res);</div><div class="line">    onFinished(res, ctx.onerror);</div><div class="line">    fn.call(ctx).then(function handleResponse() &#123;</div><div class="line">      respond.call(ctx);</div><div class="line">    &#125;).catch(ctx.onerror);</div><div class="line">  &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
+<p>看完这个函数，我们了解到真正处理请求内容的函数是fn,而这个函数的定义就是下面这段函数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">var fn = this.experimental</div><div class="line">    ? compose_es7(this.middleware)</div><div class="line">    : co.wrap(compose(this.middleware));</div></pre></td></tr></table></figure></p>
+<p>好吧，准确来说就是<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">co.wrap(compose(this.middleware));</div></pre></td></tr></table></figure></p>
+<ul>
+<li>其实我们只需要知道这段函数做了什么，就知道中间件是如何运行的了<a id="more"></a>
+同时，我们在appliction.js文件找到了app.use函数<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">app.use = function(fn)&#123;</div><div class="line">  ...</div><div class="line"></div><div class="line">  this.middleware.push(fn);</div><div class="line">  return this;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>这段代码，我们可以知道this.middleware就是一个generator函数的数组</p>
+<p>接下来我们需要知道compose函数做了什么，我们找到compose函数，其实compose很短<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">function compose(middleware)&#123;</div><div class="line">  return function *(next)&#123;</div><div class="line">    if (!next) next = noop();</div><div class="line"></div><div class="line">    var i = middleware.length;</div><div class="line"></div><div class="line">    while (i--) &#123;</div><div class="line">      next = middleware[i].call(this, next);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    return yield *next;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">function *noop()&#123;&#125;</div></pre></td></tr></table></figure></p>
+<p>这里compose函数返回了一个Generator，所以上面的代码可以变成下面的样子（当然还有middleware的变量再闭包中）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">co.wrap(function *(next)&#123;</div><div class="line">    if (!next) next = noop();</div><div class="line"></div><div class="line">    var i = middleware.length;</div><div class="line"></div><div class="line">    while (i--) &#123;</div><div class="line">      next = middleware[i].call(this, next);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    return yield *next;</div><div class="line">  &#125;)</div></pre></td></tr></table></figure></p>
+<p>接下来我们看一下co.wrap<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">co.wrap = function (fn) &#123;</div><div class="line">  createPromise.__generatorFunction__ = fn;</div><div class="line">  return createPromise;</div><div class="line">  function createPromise() &#123;</div><div class="line">    return co.call(this, fn.apply(this, arguments));</div><div class="line">  &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
+<p>所以代码可以变为下面的样子<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">function createPromise() &#123;</div><div class="line">    var fn = function *(next)&#123;</div><div class="line">        if (!next) next = noop();</div><div class="line"></div><div class="line">        var i = middleware.length;</div><div class="line"></div><div class="line">        while (i--) &#123;</div><div class="line">          next = middleware[i].call(this, next);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        return yield *next;</div><div class="line">      &#125;</div><div class="line">    return co.call(this, fn.apply(this, arguments));</div><div class="line">  &#125;</div></pre></td></tr></table></figure></p>
+<p>接下来，我们仔细看一下这段代码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">if (!next) next = noop();</div><div class="line"></div><div class="line">var i = middleware.length;</div><div class="line"></div><div class="line">while (i--) &#123;</div><div class="line">    next = middleware[i].call(this, next);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>这段代码遍历了我们的中间件数组，最终生成了一个类似下面的代码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">next = (function*()&#123;</div><div class="line">    // middleware1</div><div class="line">    ...</div><div class="line"></div><div class="line">    yield (function*()&#123;</div><div class="line">        // middleware2</div><div class="line">        ...</div><div class="line"></div><div class="line">        yield (function*()&#123;</div><div class="line">            // middleware3</div><div class="line">            ...</div><div class="line"></div><div class="line">            yield (function *()&#123;</div><div class="line">                // noop</div><div class="line">                // NO next yield !</div><div class="line">            &#125;)()</div><div class="line"></div><div class="line">            // ...middleware3</div><div class="line">        &#125;)</div><div class="line"></div><div class="line">        // ...middleware2</div><div class="line">    &#125;)</div><div class="line">    // ...middleware1</div><div class="line">&#125;)()</div></pre></td></tr></table></figure></p>
+<p>其实看到这里就已经可以看到洋葱模型的样子了。</p>
+<p>而最后就是这个next的运行，其实这个next就是一个Generator函数生成的迭代器（iterator）对象，然后由co来运行，类似下面<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">co(function*()&#123;</div><div class="line">    ...</div><div class="line"></div><div class="line">    yield *next</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+<p>co可以对generator的进行自执行。到这基本就完成可中间件的实现。</p>
+<p>眼尖的读者可以看到这里最后用到了yield<em>而非yield,可以有关于co的执行，其实就是为了减少co的一次运行，其实每次都应该用yield next,可能是tj大神怕大家忘记加了，就索性在demo里面就建议大家直接yield next就好了。具体的可以看我对于co源码实现的分析，我这里就提一下`yield 可以自动执行后面的表达式的迭代器属性，而yield只会直接返回后面的表达式，所以一个yield </em>可以使co直接拿到后面迭代器中的每一步，而yield只可以拿到迭代器，然后递归调用co`来执行迭代器。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="jinchaoxiang.top/2017/08/21/koa中间件/" data-id="cj6m7khqz0000yccv6oaynar4" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/koa/">koa</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+ <script src="/jquery/jquery.min.js"></script>
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =4
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2017/08/14/docker之安装nginx/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">docker之安装nginx</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+ 
+     
+  <div class="comments" id="comments">
+    
+     
+       
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+       
+      
+      
+  </div>
+ 
+  
+
+</section>
+           
+    <aside id="sidebar">
+  
+    
+
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#洋葱模型"><span class="toc-number">1.</span> <span class="toc-text">洋葱模型</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+    
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2014 - 2017 jinchaoxiang&nbsp;|&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;702290433@qq.com
+    </div>
+  </div>
+</footer>
+ <script src="/jquery/jquery.min.js"></script>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+    <a href="/about" class="mobile-nav-link">关于</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "e2fb4051c49842688ce669e634bc983f",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+    
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      })
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      })
+    </script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+ <script src="/js/is.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/elevator.js"></script>
+  </div>
+  <a href="https://github.com/zhchnchn"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/82b228a3648bf44fc1163ef44c62fcc60081495e/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"></a>
+</body>
+</html>

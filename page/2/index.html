@@ -69,6 +69,64 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-webpack大法之Code Splitting" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/08/12/webpack大法之Code Splitting/" class="article-date">
+  <time datetime="2017-08-12T07:11:09.000Z" itemprop="datePublished">2017-08-12</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/webpack/">webpack</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/08/12/webpack大法之Code Splitting/">webpack大法之Code Splitting</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Code-Splitting-是什么以及为什么"><a href="#Code-Splitting-是什么以及为什么" class="headerlink" title="Code Splitting 是什么以及为什么"></a>Code Splitting 是什么以及为什么</h1><p>在以前，为了减少 HTTP 请求，通常地，我们都会把所有的代码都打包成一个单独的 JS 文件。但是，如果这个 JS 文件体积很大的话，那就得不偿失了。</p>
+<p>这时，我们不妨把所有代码分成一块一块，需要某块代码的时候再去加载它；还可以利用浏览器的缓存，下次用到它的话，直接从缓存中读取。很显然，这种做法可以加快我们网页的加载速度，美滋滋！</p>
+<p>所以说，Code Splitting 其实就是把代码分成很多很多块（ chunk ）咯。</p>
+<h1 id="Code-Splitting-怎么做"><a href="#Code-Splitting-怎么做" class="headerlink" title="Code Splitting 怎么做"></a>Code Splitting 怎么做</h1><p>主要有 2 种方式：</p>
+<ul>
+<li>分离业务代码和第三方库（ vendor ）</li>
+<li>按需加载（利用 import() 语法）</li>
+</ul>
+<p>之所以把业务代码和第三方库代码分离出来，是因为产品经理的需求是源源不断的，因此业务代码更新频率大，相反第三方库代码更新迭代相对较慢且可以锁版本，所以可以充分利用浏览器的缓存来加载这些第三方库。</p>
+<p>而按需加载的适用场景，比如说「访问某个路由的时候再去加载对应的组件」，用户不一定会访问所有的路由，所以没必要把所有路由对应的组件都先在开始的加载完；更典型的例子是「某些用户他们的权限只能访问某些页面」，所以没必要把他们没权限访问的页面的代码也加载。<br>
+        
+          <p class="article-more-link">
+            <a href="/2017/08/12/webpack大法之Code Splitting/#more">继续阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="jinchaoxiang.top/2017/08/12/webpack大法之Code Splitting/" data-id="cj6m7khw8000uyccvqxxfph6v" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/webpack/">webpack</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
     <article id="post-Hexo" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2017/08/09/Hexo/" class="article-date">
@@ -108,7 +166,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="jinchaoxiang.top/2017/08/09/Hexo/" data-id="cj6m59sji0000yocv8p3gqavj" class="article-share-link">分享</a>
+      <a data-url="jinchaoxiang.top/2017/08/09/Hexo/" data-id="cj6m7khrj0001yccvfjf9ives" class="article-share-link">分享</a>
       
       
       
@@ -148,6 +206,10 @@
       <ul>
         
           <li>
+            <a href="/2017/08/21/koa中间件/">&#39;koa中间件原理剖析&#39;</a>
+          </li>
+        
+          <li>
             <a href="/2017/08/14/docker之安装nginx/">docker之安装nginx</a>
           </li>
         
@@ -161,10 +223,6 @@
         
           <li>
             <a href="/2017/08/12/webpack大法之Long Team Cache/">webpack大法之Long Team Cache</a>
-          </li>
-        
-          <li>
-            <a href="/2017/08/12/webpack大法之Code Splitting/">webpack大法之Code Splitting</a>
           </li>
         
       </ul>
